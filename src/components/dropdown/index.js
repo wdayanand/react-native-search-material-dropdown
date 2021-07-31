@@ -653,6 +653,10 @@ export default class Dropdown extends PureComponent {
       newData.push({ label: "", value: "" });
     }
     this.setState({ data: [...newData], searchText });
+    if(this.props.onSearchFilter)
+    {
+      this.props.onSearchFilter(searchText,[...newData])
+    }
   }
 
   render() {

@@ -100,6 +100,7 @@ class Example extends Component {
  searchByLabel     | allow search in dropdown by label             | Boolean  | false
  searchLabel       | label of search textinput                     | String   | Search
  searchStyle       | Dropdown Search view styles                   |   Object | -
+ onSearchFilter    | Get callback on search item (args: searchText, filterItems)   | Function | () => null
 
 Other [TextField][textfield], [TextInput][textinput] and [TouchableWithoutFeedback][touchable] properties will also work
 

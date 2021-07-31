@@ -63,4 +63,13 @@ export default StyleSheet.create({
   scrollContainer: {
     paddingVertical: 8,
   },
+  input: {
+    height: 40,
+    paddingLeft:20,
+    borderBottomWidth: 0.5,
+    color: '#808080',
+  },
+  noData:{
+    height: 80
+  }
 });

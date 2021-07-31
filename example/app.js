@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { AppRegistry, Text, View } from 'react-native';
 import { TextField } from 'react-native-material-textfield';
-import { Dropdown } from 'react-native-material-dropdown';
+import { Dropdown } from 'react-native-search-material-dropdown';
 
 export default function init() {
   class Example extends Component {
@@ -67,6 +67,7 @@ export default function init() {
             <View style={{ flexDirection: 'row' }}>
               <View style={{ flex: 1 }}>
                 <Dropdown
+                  searchByLabel={true}
                   ref={this.nameRef}
                   value={name}
                   onChangeText={this.onChangeText}

@@ -11,6 +11,7 @@ import {
   Platform,
   ViewPropTypes,
   I18nManager,
+  TextInput
 } from 'react-native';
 import Ripple from 'react-native-material-ripple';
 import { TextField } from 'react-native-material-textfield';
@@ -185,6 +186,7 @@ export default class Dropdown extends PureComponent {
       selected: -1,
       modal: false,
       value,
+      searchText: undefined,
     };
   }
 
@@ -289,6 +291,8 @@ export default class Dropdown extends PureComponent {
         leftInset,
         rightInset,
         selected,
+        searchText: undefined,
+        data: this.props.data,
       });
 
       setTimeout((() => {
@@ -333,28 +337,29 @@ export default class Dropdown extends PureComponent {
         }
 
         if (this.mounted) {
-          this.setState({ value, modal: false });
+          this.setState({ value, modal: false,searchText: undefined,data: this.props.data, });
         }
       });
   }
 
   onSelect(index) {
-    let {
-      data,
-      valueExtractor,
-      onChangeText,
-      animationDuration,
-      rippleDuration,
-    } = this.props;
-
+    let { valueExtractor, onChangeText, animationDuration, rippleDuration } =
+      this.props;
+    let data = this.state.data;
     let value = valueExtractor(data[index], index);
     let delay = Math.max(0, rippleDuration - animationDuration);
 
-    if ('function' === typeof onChangeText) {
+    if ("function" === typeof onChangeText) {
       onChangeText(value, index, data);
     }
-
-    setTimeout(() => this.onClose(value), delay);
+    this.setState({
+      data: this.props.data,
+      modal: false,
+      searchText: undefined,
+    });
+    setTimeout(() => {
+      this.onClose(value);
+    }, delay);
   }
 
   onLayout(event) {
@@ -637,6 +642,19 @@ export default class Dropdown extends PureComponent {
     );
   }
 
+  searchFilter(searchText) {
+    let data = this.props.data;
+    const newData = data.filter((item) => {
+      const curLabel = item && item.label && `${item.label.toLowerCase()}`;
+      const searchLabel = searchText.toLowerCase();
+      return curLabel.includes(searchLabel);
+    });
+    if (!newData.length) {
+      newData.push({ label: "", value: "" });
+    }
+    this.setState({ data: [...newData], searchText });
+  }
+
   render() {
     let {
       renderBase,
@@ -723,7 +741,11 @@ export default class Dropdown extends PureComponent {
       accessible,
       accessibilityLabel,
     };
-
+    const { searchLabel, searchByLabel,searchStyle } = this.props;
+    const isEmpty =
+      !this.state.data ||
+      !this.state.data.length ||
+      (!this.state.data[0].value && !this.state.data[0].label);
     return (
       <View onLayout={this.onLayout} ref={this.updateContainerRef} style={containerStyle}>
         <TouchableWithoutFeedback {...touchableProps}>
@@ -745,16 +767,34 @@ export default class Dropdown extends PureComponent {
             onResponderRelease={this.blur}
           >
             <View
-              style={[styles.picker, pickerStyle, pickerStyleOverrides]}
+              style={[styles.picker, pickerStyle, pickerStyleOverrides,isEmpty
+                ? styles.noData
+                : { height: Math.min(180, this.state.data.length * 50 + 40) }]}
               onStartShouldSetResponder={() => true}
             >
+              {searchByLabel ? (
+                <TextInput
+                  style={[styles.input,searchStyle]}
+                  placeholder={searchLabel || "Search"}
+                  placeholderTextColor="#000"
+                  clearButtonMode="always"
+                  // onSubmitEditing={() => {
+                  //   this.setState({
+                  //     value: this.state.searchText,
+                  //     modal: false,
+                  //   });
+                  // }}
+                  value={this.state.searchText}
+                  onChangeText={(text) => this.searchFilter(text.trim())}
+                />
+              ) : null}
               <FlatList
                 ref={this.updateScrollRef}
-                data={data}
+                data={this.state.data}
                 style={styles.scroll}
                 renderItem={this.renderItem}
                 keyExtractor={this.keyExtractor}
-                scrollEnabled={visibleItemCount < itemCount}
+                scrollEnabled={visibleItemCount - 1 < itemCount}
                 contentContainerStyle={styles.scrollContainer}
               />
             </View>

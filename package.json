@@ -1,10 +1,19 @@
 {
-  "name": "react-native-material-dropdown",
-  "version": "0.11.1",
+  "name": "react-native-search-material-dropdown",
+  "version": "1.0.4",
   "license": "BSD-3-Clause",
-  "author": "Alexander Nazarov <n4kz@n4kz.com>",
+  "contributors": [
+    {
+      "name": "Alexander Nazarov",
+      "email": "n4kz@n4kz.com"
+    },
+    {
+      "name": "Dayanand Waghmare",
+      "email": "wdayanand.waghmare@gmail.com"
+    }
+  ],
 
-  "description": "Material dropdown",
+  "description": "Searchable material dropdown",
   "keywords": [
     "react",
     "react-component",
@@ -14,14 +23,15 @@
     "material",
     "dropdown",
     "spinner",
-    "select"
+    "select",
+    "searchable"
   ],
 
   "main": "index.js",
 
   "repository": {
     "type": "git",
-    "url": "git://github.com/n4kz/react-native-material-dropdown.git"
+    "url": "git@github.com:wdayanand/react-native-search-material-dropdown.git"
   },
 
   "peerDependencies": {

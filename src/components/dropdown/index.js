@@ -790,6 +790,7 @@ export default class Dropdown extends PureComponent {
                   // }}
                   value={this.state.searchText}
                   onChangeText={(text) => this.searchFilter(text.trim())}
+                  allowFontScaling={this.props.allowFontScaling||false}
                 />
               ) : null}
               <FlatList
